@@ -1,4 +1,4 @@
-const express = require('express');
+const express = require('express'); 
 const cors = require('cors'); // Importa o middleware CORS
 const bodyParser = require('body-parser');
 const contactRoutes = require('./routes/contactRoutes');
@@ -14,5 +14,10 @@ app.use(bodyParser.json()); // Middleware para processar JSON no body das requis
 app.use('/api', contactRoutes); // Rotas de contato
 app.use('/api/auth', authRoutes); // Rotas de autenticação
 app.use('/api/ongs', ongRoutes); // Rotas de ONG
+
+// Rota para a raiz
+app.get('/', (req, res) => {
+    res.send('Backend do Sabor Solidário está rodando!');
+});
 
 module.exports = app;
