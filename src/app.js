@@ -1,15 +1,15 @@
-const express = require('express'); 
-const cors = require('cors'); // Importa o middleware CORS
+const express = require('express');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const contactRoutes = require('./routes/contactRoutes');
 const authRoutes = require('./routes/authRoutes');
 const ongRoutes = require('./routes/ongRoutes');
 
-const app = express(); // Inicializa o Express
+const app = express();
 
 // Configuração de CORS
 const corsOptions = {
-    origin: ['http://localhost:3001', 'https://frontsaborsolidario-5ot5kxz3k-rafaelas-projects-c9672c56.vercel.app/'], // Adicione as origens permitidas
+    origin: ['http://localhost:3001', 'https://frontsaborsolidario-5ot5kxz3k-rafaelas-projects-c9672c56.vercel.app'], // Adicione as origens permitidas
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
     credentials: true, // Permite cookies e autenticação no frontend
