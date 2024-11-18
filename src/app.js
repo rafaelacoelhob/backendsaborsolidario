@@ -9,7 +9,7 @@ const app = express(); // Inicializa o Express
 
 // Configuração de CORS
 const corsOptions = {
-    origin: ['http://localhost:3001', 'https://saborsolidario.com.br'], // Adicione as origens permitidas
+    origin: ['http://localhost:3001', 'https://frontsaborsolidario-5ot5kxz3k-rafaelas-projects-c9672c56.vercel.app/'], // Adicione as origens permitidas
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
     credentials: true, // Permite cookies e autenticação no frontend
