@@ -11,7 +11,7 @@ const app = express();
 const corsOptions = {
     origin: [
         'http://localhost:3001', // Para desenvolvimento local
-        'https://frontsaborsolidario-5ot5kxz3k-rafaelas-projects-c9672c56.vercel.app', // URL do frontend hospedado
+        'https://frontsaborsolidario.vercel.app', // URL do frontend hospedado
     ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
