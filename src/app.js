@@ -9,33 +9,45 @@ const app = express();
 
 // Configuração de CORS
 const corsOptions = {
-    origin: ['http://localhost:3001', 'https://frontsaborsolidario-5ot5kxz3k-rafaelas-projects-c9672c56.vercel.app'], // Adicione as origens permitidas
+    origin: [
+        'http://localhost:3001', // Para desenvolvimento local
+        'https://frontsaborsolidario-5ot5kxz3k-rafaelas-projects-c9672c56.vercel.app', // URL do frontend hospedado
+    ],
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
     credentials: true, // Permite cookies e autenticação no frontend
 };
 app.use(cors(corsOptions)); // Ativa o CORS com as opções configuradas
 
-app.use(bodyParser.json()); // Middleware para processar JSON no body das requisições
+// Middleware para parse do JSON no body das requisições
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-// Define as rotas
+// Middleware para log de requisições no servidor
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+    next();
+});
+
+// Rotas
 app.use('/api', contactRoutes); // Rotas de contato
 app.use('/api/auth', authRoutes); // Rotas de autenticação
 app.use('/api/ongs', ongRoutes); // Rotas de ONG
 
 // Rota para a raiz
 app.get('/', (req, res) => {
-    res.send('Backend do Sabor Solidário está rodando!');
+    res.status(200).send('Backend do Sabor Solidário está rodando!');
 });
 
 // Middleware para rotas não encontradas
 app.use((req, res, next) => {
+    console.error(`Rota não encontrada: ${req.method} ${req.originalUrl}`);
     res.status(404).json({ error: 'Rota não encontrada.' });
 });
 
 // Middleware para tratamento de erros genéricos
 app.use((err, req, res, next) => {
-    console.error(err.stack);
+    console.error('Erro interno do servidor:', err.stack);
     res.status(500).json({ error: 'Erro interno do servidor.' });
 });
 
