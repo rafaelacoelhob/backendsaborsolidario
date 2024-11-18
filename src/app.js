@@ -17,7 +17,7 @@ const corsOptions = {
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
     credentials: true, // Permite cookies e autenticação no frontend
 };
-app.use(cors(corsOptions)); // Ativa o CORS com as opções configuradas
+app.use(cors(corsOptions));
 
 // Middleware para parse do JSON no body das requisições
 app.use(bodyParser.json());
@@ -37,6 +37,14 @@ app.use('/api/ongs', ongRoutes); // Rotas de ONG
 // Rota para a raiz
 app.get('/', (req, res) => {
     res.status(200).send('Backend do Sabor Solidário está rodando!');
+});
+
+// Middleware para métodos não permitidos
+app.use((req, res, next) => {
+    if (!['GET', 'POST', 'PUT', 'DELETE'].includes(req.method)) {
+        return res.status(405).json({ error: `Método ${req.method} não permitido.` });
+    }
+    next();
 });
 
 // Middleware para rotas não encontradas
