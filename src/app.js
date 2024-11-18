@@ -12,6 +12,7 @@ const corsOptions = {
     origin: ['http://localhost:3001', 'https://saborsolidario.com.br'], // Adicione as origens permitidas
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
     allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+    credentials: true, // Permite cookies e autenticação no frontend
 };
 app.use(cors(corsOptions)); // Ativa o CORS com as opções configuradas
 
