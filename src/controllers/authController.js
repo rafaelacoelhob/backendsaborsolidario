@@ -1,5 +1,9 @@
 const db = require('../database/dbConfig');
 const bcrypt = require('bcrypt'); // Para hash de senhas
+const jwt = require('jsonwebtoken');
+
+// Configuração de segredo para JWT
+const JWT_SECRET = process.env.JWT_SECRET || 'secretKey'; // Certifique-se de definir `JWT_SECRET` no Render
 
 // Create - Registrar um usuário
 exports.register = async (req, res) => {
@@ -53,7 +57,6 @@ exports.updateUser = async (req, res) => {
     const { nome, email, senha } = req.body;
 
     try {
-        // Gerar hash da senha, se fornecida
         const hashedPassword = senha ? await bcrypt.hash(senha, 10) : null;
 
         const sql = hashedPassword
@@ -100,13 +103,19 @@ exports.login = (req, res) => {
             return res.status(401).json({ error: 'Email ou senha inválidos.' });
         }
 
-        // Comparar senha com hash
         const match = await bcrypt.compare(senha, row.senha);
         if (!match) {
             return res.status(401).json({ error: 'Email ou senha inválidos.' });
         }
 
-        res.json({ message: 'Login realizado com sucesso!', user: { id: row.id, nome: row.nome, email: row.email } });
+        // Gerar token JWT
+        const token = jwt.sign({ id: row.id, email: row.email }, JWT_SECRET, { expiresIn: '1h' });
+
+        res.json({
+            message: 'Login realizado com sucesso!',
+            token,
+            user: { id: row.id, nome: row.nome, email: row.email },
+        });
     });
 };
 
@@ -115,7 +124,6 @@ exports.resetPassword = async (req, res) => {
     const { email, novaSenha } = req.body;
 
     try {
-        // Verificar se o e-mail existe no banco
         const sqlCheck = `SELECT * FROM usuarios WHERE email = ?`;
         db.get(sqlCheck, [email], async (err, row) => {
             if (err) {
@@ -127,10 +135,8 @@ exports.resetPassword = async (req, res) => {
                 return res.status(404).json({ error: 'Email não encontrado.' });
             }
 
-            // Hash da nova senha
             const hashedPassword = await bcrypt.hash(novaSenha, 10);
 
-            // Atualizar a senha
             const sqlUpdate = `UPDATE usuarios SET senha = ? WHERE email = ?`;
             db.run(sqlUpdate, [hashedPassword, email], function (err) {
                 if (err) {
