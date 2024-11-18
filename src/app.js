@@ -7,7 +7,14 @@ const ongRoutes = require('./routes/ongRoutes');
 
 const app = express(); // Inicializa o Express
 
-app.use(cors()); // Permite requisições de qualquer origem
+// Configuração de CORS
+const corsOptions = {
+    origin: ['http://localhost:3001', 'https://saborsolidario.com.br'], // Adicione as origens permitidas
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos HTTP permitidos
+    allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+};
+app.use(cors(corsOptions)); // Ativa o CORS com as opções configuradas
+
 app.use(bodyParser.json()); // Middleware para processar JSON no body das requisições
 
 // Define as rotas
@@ -18,6 +25,17 @@ app.use('/api/ongs', ongRoutes); // Rotas de ONG
 // Rota para a raiz
 app.get('/', (req, res) => {
     res.send('Backend do Sabor Solidário está rodando!');
+});
+
+// Middleware para rotas não encontradas
+app.use((req, res, next) => {
+    res.status(404).json({ error: 'Rota não encontrada.' });
+});
+
+// Middleware para tratamento de erros genéricos
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ error: 'Erro interno do servidor.' });
 });
 
 module.exports = app;

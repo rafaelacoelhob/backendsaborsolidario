@@ -1,20 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const ongController = require('../controllers/ongController');
-
-// Rota para criar uma nova ONG
-router.post('/', ongController.createOng); // POST para criar uma ONG
+const ongController = require('../controllers/ongController'); // Certifique-se de que o caminho está correto
 
 // Rota para listar todas as ONGs
-router.get('/', ongController.getAllOngs); // GET para listar todas as ONGs
+router.get('/', ongController.getAllOngs);
+
+// Rota para criar uma ONG
+router.post('/', ongController.createOng);
 
 // Rota para consultar uma ONG pelo CNPJ
-router.get('/:cnpj', ongController.getOngByCnpj); // GET para buscar uma ONG específica pelo CNPJ
+router.get('/:cnpj', ongController.getOngByCnpj);
 
 // Rota para remover uma ONG pelo CNPJ
-router.delete('/:cnpj', ongController.deleteOng); // DELETE para remover uma ONG específica
+router.delete('/:cnpj', ongController.deleteOng);
 
-// Rota para atualizar informações de uma ONG
-router.put('/:cnpj', ongController.updateOng); // PUT para atualizar dados de uma ONG específica
+// Rota para atualizar uma ONG pelo CNPJ
+router.put('/:cnpj', ongController.updateOng);
 
 module.exports = router;
